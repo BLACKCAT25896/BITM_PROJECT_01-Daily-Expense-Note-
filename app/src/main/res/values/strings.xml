@@ -3,4 +3,18 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_expense">Expense</string>
 
+
+    <string-array name="expensetype">
+        <item>Select Item</item>
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

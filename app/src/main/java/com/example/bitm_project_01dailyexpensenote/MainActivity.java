@@ -1,17 +1,34 @@
 package com.example.bitm_project_01dailyexpensenote;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
-    private TextView mTextMessage;
+import java.text.DateFormat;
+import java.util.Calendar;
+
+public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+
+    private Spinner spinner;
+    private TextView fromDate, toDate;
+    private ImageButton fromBtn, toBtn;
+    private DialogFragment datePicker;
+
+
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -20,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_dashboard);
+
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_expense);
+
                     return true;
 
             }
@@ -36,8 +53,67 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        mTextMessage = findViewById(R.id.message);
+
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
+        init();
+        initSpinner();
+
+
+        fromBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(),"From Date");
+
+            }
+        });
+
+        toBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                datePicker.show(getSupportFragmentManager(),"To Date");
+
+            }
+        });
+
+
+
+
     }
 
+    private void initSpinner() {
+        spinner = findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.expensetype,R.layout.support_simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+    }
+
+    private void init() {
+        fromDate = findViewById(R.id.fromDateTV);
+        toDate = findViewById(R.id.toDateTV);
+        fromBtn = findViewById(R.id.fromDateBtn);
+        toBtn = findViewById(R.id.toDateBtn);
+        datePicker = new DatePickerFragment();
+
+
+
+
+    }
+
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH,month);
+        calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+        String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+        fromDate.setText(currentDateString);
+
+    }
 }
