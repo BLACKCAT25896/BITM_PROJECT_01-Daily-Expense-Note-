@@ -42,47 +42,38 @@ public class ExpenseFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_expense, container, false);
 
 
-
         init(view);
         initRecyclerView(view);
-
-
 
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),ExpenseActivity.class));
+                startActivity(new Intent(getActivity(), ExpenseActivity.class));
             }
         });
 
         showexpense();
 
-
-
         return view;
-
-
-
 
     }
 
     private void showexpense() {
         Cursor cursor = helper.showExpenseData();
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
 
             int id = cursor.getInt(cursor.getColumnIndex(helper.COL_ID));
             String expenseName = cursor.getString(cursor.getColumnIndex(helper.COL_Type));
-            int  expenseAmount = cursor.getInt(cursor.getColumnIndex(helper.COL_AMOUNT));
+            int expenseAmount = cursor.getInt(cursor.getColumnIndex(helper.COL_AMOUNT));
             String date = cursor.getString(cursor.getColumnIndex(helper.COL_DATE));
             String time = cursor.getString(cursor.getColumnIndex(helper.COL_TIME));
 
-            expenseList.add(new Expense(id, expenseName ,Integer.parseInt(String.valueOf(expenseAmount)),date,time ));
+            expenseList.add(new Expense(id, expenseName, Integer.parseInt(String.valueOf(expenseAmount)), date, time));
             adapter.notifyDataSetChanged();
 
         }
     }
-
 
 
     private void initRecyclerView(View view) {
@@ -95,9 +86,9 @@ public class ExpenseFragment extends Fragment {
     private void init(View view) {
 
         expenseList = new ArrayList<>();
-        adapter = new DailyExpenseAdapter(helper,expenseList,getContext());
+        adapter = new DailyExpenseAdapter(helper, expenseList, getContext());
         helper = new ExpenseDataOpenHelper(getContext());
-        floatingActionButton= view.findViewById(R.id.floatingActionBtn);
+        floatingActionButton = view.findViewById(R.id.floatingActionBtn);
     }
 
 }

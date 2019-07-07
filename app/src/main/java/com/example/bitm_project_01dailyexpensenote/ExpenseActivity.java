@@ -51,7 +51,7 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
             @Override
             public void onClick(View view) {
                 DialogFragment timePicker = new TimePickerFragment();
-                timePicker.show(getSupportFragmentManager(),"time picker");
+                timePicker.show(getSupportFragmentManager(), "time picker");
 
             }
         });
@@ -63,42 +63,27 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
                 amount = expenseAmount.getText().toString();
                 eDate = expenseDate.getText().toString();
                 eTime = expenseTime.getText().toString();
-                long id = helper.insertExpenseData(type , Integer.parseInt(String.valueOf(amount)), eDate,eTime);
+                helper.insertExpenseData(type, Integer.parseInt(String.valueOf(amount)), eDate, eTime);
 
 
-               //Toast.makeText(ExpenseActivity.this, "data added  " + id , Toast.LENGTH_SHORT).show();
-
-                startActivity(new Intent(ExpenseActivity.this,ExpenseFragment.class));
-
-
-                
-
-
+                startActivity(new Intent(ExpenseActivity.this, ExpenseFragment.class));
 
 
             }
         });
 
 
-
-
-
-
-
-
-
-
     }
 
     private void init() {
         expenseDate = findViewById(R.id.expenseDate);
-        date= findViewById(R.id.date);
-        time= findViewById(R.id.timeIV);
+        date = findViewById(R.id.date);
+        time = findViewById(R.id.timeIV);
         expenseTime = findViewById(R.id.timeET);
         expenseAmount = findViewById(R.id.expenseAET);
-        addExp= findViewById(R.id.addExpenseBtn);
+        addExp = findViewById(R.id.addExpenseBtn);
         helper = new ExpenseDataOpenHelper(this);
-        adapter = new DailyExpenseAdapter(helper,expenseList,this);
+        adapter = new DailyExpenseAdapter(helper, expenseList, this);
 
     }
 
@@ -118,8 +103,7 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
 
-        expenseTime.setText("Hours :" + hour + "Minutes: " + minute );
-
+        expenseTime.setText("Hours :" + hour + "Minutes: " + minute);
 
 
     }
