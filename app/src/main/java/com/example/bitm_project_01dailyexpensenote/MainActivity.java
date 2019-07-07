@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     private DialogFragment datePicker;
 
 
-
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -40,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             switch (item.getItemId()) {
                 case R.id.navigation_dashboard:
                     replaceFragment(new DashboardFragment());
-
 
 
                     return true;
@@ -54,10 +51,10 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         }
     };
 
-    public void replaceFragment(Fragment fragment){
+    public void replaceFragment(Fragment fragment) {
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace( R.id.frameLayout,fragment);
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.commit();
 
     }
@@ -69,38 +66,48 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        setTitle("Daily Expense");
 
 
         init();
         initSpinner();
+
+        todaydate();
 
 
         fromBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DialogFragment datePicker = new DatePickerFragment();
-                datePicker.show(getSupportFragmentManager(),"From Date");
+                datePicker.show(getSupportFragmentManager(), "From Date");
+
 
             }
         });
+
 
         toBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                datePicker.show(getSupportFragmentManager(),"To Date");
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "To Date Date");
 
             }
         });
 
 
+    }
 
+    private void todaydate() {
+        Calendar calendar = Calendar.getInstance();
 
+        String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
+        toDate.setText(currentDateString);
     }
 
     private void initSpinner() {
         spinner = findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.expensetype,R.layout.support_simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.expensetype, R.layout.support_simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
@@ -113,8 +120,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         datePicker = new DatePickerFragment();
 
 
-
-
     }
 
 
@@ -124,14 +129,12 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         Calendar calendar = Calendar.getInstance();
 
         calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH,month);
-        calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
         fromDate.setText(currentDateString);
 
     }
-
-
 
 
 }
