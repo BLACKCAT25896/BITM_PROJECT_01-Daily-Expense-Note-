@@ -41,16 +41,15 @@ public class DashboardFragment extends Fragment {
 
 
         init(view);
-//        Double totalAmount = 0.0;
-//        for (int i = 0; i< expenseList.size(); i++){
-//
-//
-//            totalAmount += expenseList.get(i).getExpenseAmount();
-//        }
-//
-//        settotalAmount(view);
+
+        totalAmountExp(view);
+
 
         return view;
+
+    }
+
+    private void totalAmountExp(View view) {
 
     }
 

@@ -82,7 +82,7 @@
         <ImageButton
             android:layout_width="100dp"
             android:layout_height="50dp"
-
+            android:id="@+id/openDoc"
             android:src="@drawable/ic_attachment_black_24dp"/>
 
 

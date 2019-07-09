@@ -22,16 +22,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.List;
 
-public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapter.ViewHolder> implements PopupMenu.OnMenuItemClickListener{
-
-
-
+public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapter.ViewHolder> implements PopupMenu.OnMenuItemClickListener {
+    private long allTotal=0;
     private List<Expense> expenseList;
     private Context context;
     private ExpenseDataOpenHelper helper;
-
-
-
 
 
     public DailyExpenseAdapter(ExpenseDataOpenHelper helper, List<Expense> expenseList, Context context) {
@@ -44,8 +39,7 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expense_layout,parent,false);
-
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_expense_layout, parent, false);
 
 
         return new ViewHolder(view);
@@ -59,32 +53,39 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
         holder.expenseName.setText(expense.getExpenseName());
         holder.expenseAmount.setText(Double.toString(expense.getExpenseAmount()));
         long totalAmount = Integer.valueOf(expense.getExpenseAmount());
+        allTotal = allTotal + totalAmount;
 
         holder.imageButtonmenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 //showPopUp(view);
-                PopupMenu popupMenu = new PopupMenu(context,view);
+                PopupMenu popupMenu = new PopupMenu(context, view);
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
 
-                        switch (menuItem.getItemId()){
+                        switch (menuItem.getItemId()) {
                             case R.id.updateItem:
 
 //                                Toast.makeText(context, "Update item Clicked", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(context,UpdateExpenseActivity.class);
+                                Intent intent = new Intent(context, UpdateExpenseActivity.class);
+                                Bundle args = new Bundle();
+                                args.putString("expName", expense.getExpenseName());
+                                args.putInt("expAmount", expense.getExpenseAmount());
+                                args.putString("expDate", expense.getDate());
+                                args.putString("expTime", expense.getTime());
                                 context.startActivity(intent);
                                 return true;
                             case R.id.deleteItem:
 
 
-
-                             // helper.deleteExpenseData(expense.getId());
+                              // helper.deleteExpenseData(expense.getId());
                                 expenseList.remove(holder.getAdapterPosition());
 
+
                                 notifyItemRemoved(holder.getAdapterPosition());
+                                notifyDataSetChanged();
 
 
                                 Toast.makeText(context, "Delete item Clicked", Toast.LENGTH_SHORT).show();
@@ -100,33 +101,33 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
                 popupMenu.inflate(R.menu.popup);
                 popupMenu.show();
 
-               // return true;
+                // return true;
 
 
             }
         });
 
 
-       holder.itemView.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-               Bundle args = new Bundle();
-               args.putString("expName", expense.getExpenseName());
-               args.putInt("expAmount",expense.getExpenseAmount());
-               args.putString("expDate",expense.getDate());
-               args.putString("expTime",expense.getTime());
+                Bundle args = new Bundle();
+                args.putString("expName", expense.getExpenseName());
+                args.putInt("expAmount", expense.getExpenseAmount());
+                args.putString("expDate", expense.getDate());
+                args.putString("expTime", expense.getTime());
 
-               BottomSheetDialogFragment bottomSheet = new DetailsBottomSheet();
-
-
-               bottomSheet.setArguments(args);
-
-               bottomSheet.show(((FragmentActivity)context).getSupportFragmentManager(), bottomSheet.getTag());
+                BottomSheetDialogFragment bottomSheet = new DetailsBottomSheet();
 
 
-           }
-       });
+                bottomSheet.setArguments(args);
+
+                bottomSheet.show(((FragmentActivity) context).getSupportFragmentManager(), bottomSheet.getTag());
+
+
+            }
+        });
 
     }
 
@@ -134,7 +135,6 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
     public int getItemCount() {
         return expenseList.size();
     }
-
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -153,11 +153,11 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
-        switch (menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.updateItem:
-            return true;
+                return true;
             case R.id.deleteItem:
-            return true;
+                return true;
             default:
                 return false;
         }

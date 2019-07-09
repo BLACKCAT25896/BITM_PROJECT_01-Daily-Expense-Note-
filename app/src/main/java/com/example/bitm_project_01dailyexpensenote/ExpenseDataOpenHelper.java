@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 public class ExpenseDataOpenHelper extends SQLiteOpenHelper {
 
@@ -32,7 +33,8 @@ public class ExpenseDataOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        getWritableDatabase().update(TABLE_NAME,new ContentValues(),"ID=?",new String[]{String.valueOf(i)});
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        this.onCreate(sqLiteDatabase);
 
     }
 
@@ -60,7 +62,11 @@ public class ExpenseDataOpenHelper extends SQLiteOpenHelper {
     }
 
     public void deleteExpenseData(int data){
-       getWritableDatabase().delete(TABLE_NAME,"ID=?", new String[]{String.valueOf(data)});
+       //getWritableDatabase().delete(TABLE_NAME,"ID=?", new String[]{String.valueOf(data)});
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL("DELETE FROM "+TABLE_NAME+" WHERE _id='"+data+"'");
+       // Toast.makeText(context, "Deleted successfully.", Toast.LENGTH_SHORT).show();
     }
 
 }

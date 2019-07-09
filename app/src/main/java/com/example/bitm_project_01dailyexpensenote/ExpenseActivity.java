@@ -7,12 +7,14 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -25,8 +27,8 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
 
     private EditText expenseAmount, expenseDate, expenseTime;
     private Spinner spinner;
-    private ImageButton date, time;
-    private Button addExp;
+    private ImageButton date, time, openDoc;
+    private Button addExp, addDocBtn;
     private String type, amount, eDate, eTime;
     private ExpenseDataOpenHelper helper;
     private DailyExpenseAdapter adapter;
@@ -41,8 +43,16 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
 
 
         init();
-       initSpinner();
+        initSpinner();
         date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "From Date");
+
+            }
+        });
+        expenseDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DialogFragment datePicker = new DatePickerFragment();
@@ -59,6 +69,51 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
 
             }
         });
+
+        expenseTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment timePicker = new TimePickerFragment();
+                timePicker.show(getSupportFragmentManager(), "time picker");
+
+            }
+        });
+
+        openDoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                PopupMenu popupMenu = new PopupMenu(ExpenseActivity.this, view);
+                //popupMenu.getMenuInflater().inflate(R.menu.document, popupMenu.getMenu());
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+
+                        switch (menuItem.getItemId()) {
+                            case R.id.camera:
+
+                                Toast.makeText(ExpenseActivity.this, "Camera", Toast.LENGTH_SHORT).show();
+                                return true;
+                            case R.id.gallery:
+                                Toast.makeText(ExpenseActivity.this, "Gallery", Toast.LENGTH_SHORT).show();
+                                return true;
+                            default:
+
+
+                        }
+
+
+                        return false;
+                    }
+                });
+                popupMenu.inflate(R.menu.document);
+                popupMenu.show();
+
+            }
+        });
+
+
         addExp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,13 +141,15 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
     }
 
     private void initSpinner() {
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,R.array.expensetype,R.layout.support_simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.expensetype, R.layout.support_simple_spinner_dropdown_item);
         spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
     }
 
 
     private void init() {
+        openDoc = findViewById(R.id.openDoc);
+        addDocBtn = findViewById(R.id.addDocBtn);
         expenseDate = findViewById(R.id.expenseDate);
         date = findViewById(R.id.date);
         time = findViewById(R.id.timeIV);
