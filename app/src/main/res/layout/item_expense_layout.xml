@@ -26,7 +26,10 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_attach_money_black_24dp"
+                android:src="@drawable/ic_taka2"
+                android:background="@android:color/transparent"
+                android:foregroundGravity="center_horizontal"
+                android:layout_marginRight="5dp"
                 android:layout_gravity="right"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -40,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_more_vert_black_24dp"
                 android:id="@+id/editOrUpdateMenu"
+                android:background="@android:color/transparent"
                 android:layout_gravity="right"/>
 
 

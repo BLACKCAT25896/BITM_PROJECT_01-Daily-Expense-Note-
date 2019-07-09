@@ -6,11 +6,18 @@
 
     <string-array name="expensetype">
         <item>Select Item</item>
-        <item>One</item>
-        <item>Two</item>
-        <item>Three</item>
-        <item>Four</item>
-        <item>Five</item>
+        <item>Breakfast</item>
+        <item>Launch</item>
+        <item>Dinner</item>
+        <item>Shopping</item>
+        <item>Medicine</item>
+        <item>Tour</item>
+        <item>Party</item>
+        <item>Journey</item>
+        <item>Electricity Bill</item>
+        <item>Water Bill</item>
+        <item>Internet Bill</item>
+        <item>Gas Bill</item>
 
     </string-array>
 

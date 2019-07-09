@@ -21,7 +21,7 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-public class ExpenseActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class UpdateExpenseActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private EditText expenseAmount, expenseDate, expenseTime;
     private Spinner spinner;
@@ -32,16 +32,16 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
     private DailyExpenseAdapter adapter;
     private List<Expense> expenseList;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_expense);
-        setTitle("Add Expense");
-
+        setContentView(R.layout.activity_update_expense);
+        setTitle("Update Expense");
 
         init();
-       initSpinner();
+        initSpinner();
+
+
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,13 +70,13 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
                 helper.insertExpenseData(type, Integer.parseInt(String.valueOf(amount)), eDate, eTime);
 
 
-                Toast.makeText(ExpenseActivity.this, "Data added to Database", Toast.LENGTH_SHORT).show();
-                expenseAmount.getText().clear();
-                expenseDate.getText().clear();
-                expenseTime.getText().clear();
+                Toast.makeText(UpdateExpenseActivity.this, "Data updated to Database", Toast.LENGTH_SHORT).show();
+//                expenseAmount.getText().clear();
+//                expenseDate.getText().clear();
+//                expenseTime.getText().clear();
 
 
-                //startActivity(new Intent(ExpenseActivity.this, ExpenseFragment.class));
+                startActivity(new Intent(UpdateExpenseActivity.this, ExpenseFragment.class));
 
 
             }
@@ -91,7 +91,6 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
         spinner.setAdapter(spinnerAdapter);
     }
 
-
     private void init() {
         expenseDate = findViewById(R.id.expenseDate);
         date = findViewById(R.id.date);
@@ -102,12 +101,10 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
         helper = new ExpenseDataOpenHelper(this);
         adapter = new DailyExpenseAdapter(helper, expenseList, this);
         spinner = findViewById(R.id.spinnerView);
-
     }
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-
         Calendar calendar = Calendar.getInstance();
 
         calendar.set(Calendar.YEAR, year);
@@ -120,10 +117,10 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-
         expenseTime.setText("Hours: " + hour + "  Minutes: " + minute);
 
-
     }
-
 }
+
+
+

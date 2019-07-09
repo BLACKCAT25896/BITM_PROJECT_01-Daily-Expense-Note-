@@ -64,8 +64,8 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        replaceFragment(new DashboardFragment());
         setTitle("Daily Expense");
 
 

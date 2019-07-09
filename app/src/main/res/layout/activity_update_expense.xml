@@ -5,10 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="5dp"
-    tools:context=".ExpenseActivity">
-
-
+    tools:context=".UpdateExpenseActivity">
     <Spinner
         android:id="@+id/spinnerView"
         android:layout_width="wrap_content"
@@ -87,15 +84,15 @@
 
 
 
-       <Button
-           android:id="@+id/addDocBtn"
-           android:background="@drawable/custom_button"
-           android:textColor="#fff"
-           android:layout_width="150dp"
-           android:layout_marginLeft="100dp"
-           android:layout_height="wrap_content"
-           android:text="Add Document (if any)"
-           android:textAllCaps="false"/>
+        <Button
+            android:id="@+id/addDocBtn"
+            android:background="@drawable/custom_button"
+            android:textColor="#fff"
+            android:layout_width="150dp"
+            android:layout_marginLeft="100dp"
+            android:layout_height="wrap_content"
+            android:text="Add Document (if any)"
+            android:textAllCaps="false"/>
 
 
     </LinearLayout>
@@ -104,15 +101,10 @@
         android:layout_gravity="center"
         android:layout_margin="50dp"
         android:layout_height="wrap_content"
-        android:text="Add Expense"
+        android:text="Update Expense"
         android:textColor="#fff"
         android:background="@drawable/custom_button"
         android:id="@+id/addExpenseBtn"
         android:textAllCaps="false"/>
-
-
-
-
-
 
 </LinearLayout>

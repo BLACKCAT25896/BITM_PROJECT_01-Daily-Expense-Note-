@@ -13,6 +13,7 @@
 
        />
     <TextView
+        android:id="@+id/typeNameTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Electricity bill"
@@ -26,6 +27,7 @@
         android:textSize="20dp"
         />
     <TextView
+        android:id="@+id/amountTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="2000"
@@ -39,6 +41,7 @@
         android:textSize="20dp"
         />
     <TextView
+        android:id="@+id/dateTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="08 July 2019"
@@ -52,6 +55,7 @@
     android:textSize="20dp"
    />
     <TextView
+        android:id="@+id/timeTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="5:30 PM"
@@ -59,6 +63,7 @@
         android:layout_margin="5dp"
         />
     <Button
+        android:id="@+id/showDoc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Show Documents"
@@ -66,6 +71,7 @@
         android:gravity="center"
         android:layout_gravity="center"/>
     <ImageView
+        android:id="@+id/imageShow"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

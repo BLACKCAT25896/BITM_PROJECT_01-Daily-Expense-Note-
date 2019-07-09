@@ -16,7 +16,7 @@ public class ExpenseDataOpenHelper extends SQLiteOpenHelper {
     public static String COL_AMOUNT = "Amount";
     public static String COL_DATE = "Date";
     public static String COL_TIME = "Time";
-    public String CREATE_TABLE = "create table Expense(Id integer primary key, Type text, Amount int, Date text, Time text)";
+    public String CREATE_TABLE = "create table "+TABLE_NAME+" ("+COL_ID+" integer primary key, "+COL_Type+" text, "+COL_AMOUNT+" int, "+COL_DATE+" text, "+COL_TIME+" text)";
     public static int VERSION = 1;
 
 
@@ -32,6 +32,7 @@ public class ExpenseDataOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        getWritableDatabase().update(TABLE_NAME,new ContentValues(),"ID=?",new String[]{String.valueOf(i)});
 
     }
 
@@ -56,6 +57,10 @@ public class ExpenseDataOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery(show_all,null);
         return cursor;
+    }
+
+    public void deleteExpenseData(int data){
+       getWritableDatabase().delete(TABLE_NAME,"ID=?", new String[]{String.valueOf(data)});
     }
 
 }
