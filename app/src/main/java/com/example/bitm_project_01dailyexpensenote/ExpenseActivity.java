@@ -7,6 +7,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -84,7 +85,7 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
             public void onClick(View view) {
 
                 PopupMenu popupMenu = new PopupMenu(ExpenseActivity.this, view);
-                //popupMenu.getMenuInflater().inflate(R.menu.document, popupMenu.getMenu());
+
 
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -93,25 +94,40 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
                         switch (menuItem.getItemId()) {
                             case R.id.camera:
 
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                startActivityForResult(intent,0);
+
+
                                 Toast.makeText(ExpenseActivity.this, "Camera", Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.gallery:
+
+                                Intent intent1 = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                startActivityForResult(intent1,1);
+
+
                                 Toast.makeText(ExpenseActivity.this, "Gallery", Toast.LENGTH_SHORT).show();
                                 return true;
                             default:
 
 
+
+
                         }
+
+
 
 
                         return false;
                     }
                 });
+
                 popupMenu.inflate(R.menu.document);
                 popupMenu.show();
 
             }
         });
+        
 
 
         addExp.setOnClickListener(new View.OnClickListener() {
