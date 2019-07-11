@@ -1,13 +1,24 @@
 package com.example.bitm_project_01dailyexpensenote;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -15,11 +26,16 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -28,12 +44,15 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
 
     private EditText expenseAmount, expenseDate, expenseTime;
     private Spinner spinner;
-    private ImageButton date, time, openDoc;
+    private ImageButton date, time;
     private Button addExp, addDocBtn;
-    private String type, amount, eDate, eTime;
+    private String type, amount, eDate, eTime,document;
     private ExpenseDataOpenHelper helper;
     private DailyExpenseAdapter adapter;
     private List<Expense> expenseList;
+    private ImageView openDoc;
+    private Bitmap bp;
+    private byte[] photo,p;
 
 
     @Override
@@ -80,7 +99,7 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
             }
         });
 
-        openDoc.setOnClickListener(new View.OnClickListener() {
+        addDocBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -138,13 +157,29 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
                 amount = expenseAmount.getText().toString();
                 eDate = expenseDate.getText().toString();
                 eTime = expenseTime.getText().toString();
-                helper.insertExpenseData(type, Integer.parseInt(String.valueOf(amount)), eDate, eTime);
+
+
+
+
+
+
+
+
+
+
+
+
+
+                helper.insertExpenseData(type, Integer.parseInt(String.valueOf(amount)), eDate, eTime,imageViewToByte(openDoc));
 
 
                 Toast.makeText(ExpenseActivity.this, "Data added to Database", Toast.LENGTH_SHORT).show();
                 expenseAmount.getText().clear();
                 expenseDate.getText().clear();
                 expenseTime.getText().clear();
+
+
+
 
 
                 //startActivity(new Intent(ExpenseActivity.this, ExpenseFragment.class));
@@ -155,6 +190,95 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
 
 
     }
+
+
+    //////////////////***********************************************///////////////////////
+    public static byte[] imageViewToByte(ImageView image) {
+        Bitmap bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if(requestCode == 1){
+            if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, 1);
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "You don't have permission to access file location!", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    /////////////////***********************************************///////////////////////
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(requestCode ==0){
+                Bundle bundle = data.getExtras();
+                Bitmap bitmap = (Bitmap) bundle.get("data");
+               openDoc.setImageBitmap(bitmap);
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream .toByteArray();
+
+                String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+
+
+            }else if(requestCode ==1){
+
+                Uri uri = data.getData();
+
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(uri);
+                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    openDoc.setImageBitmap(bitmap);
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                    byte[] byteArray = byteArrayOutputStream .toByteArray();
+
+                    String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+
+
+//    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality)
+//    {
+//        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
+//        image.compress(compressFormat, quality, byteArrayOS);
+//        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
+//    }
+//
+//    public static Bitmap decodeBase64(String input)
+//    {
+//        byte[] decodedBytes = Base64.decode(input, 0);
+//        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+//    }
+
+
+
 
     private void initSpinner() {
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.expensetype, R.layout.support_simple_spinner_dropdown_item);

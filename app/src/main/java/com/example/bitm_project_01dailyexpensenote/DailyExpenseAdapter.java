@@ -2,12 +2,15 @@ package com.example.bitm_project_01dailyexpensenote;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,13 +23,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
+
+import static android.graphics.Bitmap.*;
 
 public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapter.ViewHolder> implements PopupMenu.OnMenuItemClickListener {
     private long allTotal=0;
     private List<Expense> expenseList;
     private Context context;
     private ExpenseDataOpenHelper helper;
+
+
+
+
 
 
     public DailyExpenseAdapter(ExpenseDataOpenHelper helper, List<Expense> expenseList, Context context) {
@@ -52,6 +62,7 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
 
         holder.expenseName.setText(expense.getExpenseName());
         holder.expenseAmount.setText(Double.toString(expense.getExpenseAmount()));
+
         long totalAmount = Integer.valueOf(expense.getExpenseAmount());
         allTotal = allTotal + totalAmount;
 
@@ -75,14 +86,14 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
                                 args.putInt("expAmount", expense.getExpenseAmount());
                                 args.putString("expDate", expense.getDate());
                                 args.putString("expTime", expense.getTime());
+
                                 context.startActivity(intent);
                                 return true;
                             case R.id.deleteItem:
 
 
-                              // helper.deleteExpenseData(expense.getId());
+                               //helper.deleteExpenseData(expenseList.get(position).getId());
                                 expenseList.remove(holder.getAdapterPosition());
-
 
                                 notifyItemRemoved(holder.getAdapterPosition());
                                 notifyDataSetChanged();
@@ -118,6 +129,8 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
                 args.putString("expDate", expense.getDate());
                 args.putString("expTime", expense.getTime());
 
+
+
                 BottomSheetDialogFragment bottomSheet = new DetailsBottomSheet();
 
 
@@ -141,12 +154,16 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
         private TextView expenseName, expenseAmount;
         private ImageButton imageButtonmenu;
 
+
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             expenseName = itemView.findViewById(R.id.expenseName);
             expenseAmount = itemView.findViewById(R.id.expenseAmount);
             imageButtonmenu = itemView.findViewById(R.id.editOrUpdateMenu);
+
+
         }
     }
 

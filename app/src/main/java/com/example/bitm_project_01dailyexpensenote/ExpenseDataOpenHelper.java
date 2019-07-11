@@ -3,6 +3,7 @@ package com.example.bitm_project_01dailyexpensenote;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
@@ -17,8 +18,9 @@ public class ExpenseDataOpenHelper extends SQLiteOpenHelper {
     public static String COL_AMOUNT = "Amount";
     public static String COL_DATE = "Date";
     public static String COL_TIME = "Time";
-    public String CREATE_TABLE = "create table "+TABLE_NAME+" ("+COL_ID+" integer primary key, "+COL_Type+" text, "+COL_AMOUNT+" int, "+COL_DATE+" text, "+COL_TIME+" text)";
-    public static int VERSION = 1;
+    public static String COL_DOCUMENT = "Document";
+    public String CREATE_TABLE = "create table "+TABLE_NAME+" ("+COL_ID+" integer primary key, "+COL_Type+" text not null, "+COL_AMOUNT+" int not null, "+COL_DATE+" text not null, "+COL_TIME+" text , "+COL_DOCUMENT+" BLOB)";
+    public static int VERSION = 3;
 
 
     public ExpenseDataOpenHelper(Context context) {
@@ -39,13 +41,14 @@ public class ExpenseDataOpenHelper extends SQLiteOpenHelper {
     }
 
 
-    public long insertExpenseData(String type, int amount, String date, String time) {
+    public long insertExpenseData(String type, int amount, String date, String time, byte[] document) {
 
         ContentValues contV = new ContentValues();
         contV.put(COL_Type, type);
         contV.put(COL_AMOUNT, amount);
         contV.put(COL_DATE, date);
         contV.put(COL_TIME, time);
+        contV.put(COL_DOCUMENT,document);
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         long id = sqLiteDatabase.insert(TABLE_NAME, null, contV);
         sqLiteDatabase.close();
@@ -62,11 +65,13 @@ public class ExpenseDataOpenHelper extends SQLiteOpenHelper {
     }
 
     public void deleteExpenseData(int data){
-       //getWritableDatabase().delete(TABLE_NAME,"ID=?", new String[]{String.valueOf(data)});
-        SQLiteDatabase db = this.getWritableDatabase();
+       getWritableDatabase().delete(TABLE_NAME,"ID=?", new String[]{String.valueOf(data)});
 
-        db.execSQL("DELETE FROM "+TABLE_NAME+" WHERE _id='"+data+"'");
-       // Toast.makeText(context, "Deleted successfully.", Toast.LENGTH_SHORT).show();
     }
+
+
+
+
+
 
 }

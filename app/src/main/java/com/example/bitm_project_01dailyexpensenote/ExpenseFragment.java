@@ -3,6 +3,8 @@ package com.example.bitm_project_01dailyexpensenote;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -68,8 +71,14 @@ public class ExpenseFragment extends Fragment {
             int expenseAmount = cursor.getInt(cursor.getColumnIndex(helper.COL_AMOUNT));
             String date = cursor.getString(cursor.getColumnIndex(helper.COL_DATE));
             String time = cursor.getString(cursor.getColumnIndex(helper.COL_TIME));
+            byte[] doc = cursor.getBlob(cursor.getColumnIndex(helper.COL_DOCUMENT));
 
-            expenseList.add(new Expense(id, expenseName, Integer.parseInt(String.valueOf(expenseAmount)), date, time));
+
+//            Bitmap bmp= BitmapFactory.decodeByteArray(doc,0,doc.length);
+//            ImageView image = new ImageView(getContext());
+//            image.setImageBitmap(bmp);
+
+            expenseList.add(new Expense(id, expenseName, Integer.parseInt(String.valueOf(expenseAmount)), date, time, doc));
             adapter.notifyDataSetChanged();
 
         }

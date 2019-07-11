@@ -1,18 +1,22 @@
 package com.example.bitm_project_01dailyexpensenote;
 
-public class Expense  {
+import android.widget.ImageView;
+
+public class Expense {
     private int id;
     private String expenseName;
     private int expenseAmount;
     private String date;
     private String time;
+    private byte[] image;
 
-    public Expense(int id, String expenseName, int expenseAmount, String date, String time) {
+    public Expense(int id, String expenseName, int expenseAmount, String date, String time, byte[] image) {
         this.id = id;
         this.expenseName = expenseName;
         this.expenseAmount = expenseAmount;
         this.date = date;
         this.time = time;
+        this.image = image;
     }
 
     public int getId() {
@@ -34,4 +38,10 @@ public class Expense  {
     public String getTime() {
         return time;
     }
+
+    public byte[] getImage() {
+        return image;
+    }
 }
+
+

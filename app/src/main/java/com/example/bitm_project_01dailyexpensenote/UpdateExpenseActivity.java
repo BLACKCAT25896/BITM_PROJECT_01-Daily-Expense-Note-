@@ -27,7 +27,7 @@ public class UpdateExpenseActivity extends AppCompatActivity implements DatePick
     private Spinner spinner;
     private ImageButton date, time;
     private Button addExp;
-    private String type, amount, eDate, eTime;
+    private String type, amount, eDate, eTime,document;
     private ExpenseDataOpenHelper helper;
     private DailyExpenseAdapter adapter;
     private List<Expense> expenseList;
@@ -67,7 +67,8 @@ public class UpdateExpenseActivity extends AppCompatActivity implements DatePick
                 amount = expenseAmount.getText().toString();
                 eDate = expenseDate.getText().toString();
                 eTime = expenseTime.getText().toString();
-                helper.insertExpenseData(type, Integer.parseInt(String.valueOf(amount)), eDate, eTime);
+
+                helper.insertExpenseData(type, Integer.parseInt(String.valueOf(amount)), eDate, eTime,null);
 
 
                 Toast.makeText(UpdateExpenseActivity.this, "Data updated to Database", Toast.LENGTH_SHORT).show();
