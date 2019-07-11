@@ -79,11 +79,6 @@ public class DetailsBottomSheet extends BottomSheetDialogFragment {
 
 
 
-
-
-
-
-
     }
 
 

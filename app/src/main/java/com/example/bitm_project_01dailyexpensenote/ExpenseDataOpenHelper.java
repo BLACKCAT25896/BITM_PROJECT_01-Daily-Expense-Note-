@@ -35,6 +35,7 @@ public class ExpenseDataOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+         sqLiteDatabase = getWritableDatabase();
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         this.onCreate(sqLiteDatabase);
 

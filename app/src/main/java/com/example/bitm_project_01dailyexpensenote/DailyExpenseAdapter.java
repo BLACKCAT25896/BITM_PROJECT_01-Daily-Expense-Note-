@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import static android.graphics.Bitmap.*;
@@ -79,13 +83,13 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
                         switch (menuItem.getItemId()) {
                             case R.id.updateItem:
 
-//                                Toast.makeText(context, "Update item Clicked", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(context, UpdateExpenseActivity.class);
-                                Bundle args = new Bundle();
-                                args.putString("expName", expense.getExpenseName());
-                                args.putInt("expAmount", expense.getExpenseAmount());
-                                args.putString("expDate", expense.getDate());
-                                args.putString("expTime", expense.getTime());
+
+                                intent.putExtra("expName", expense.getExpenseName());
+                                intent.putExtra("expAmount", expense.getExpenseAmount());
+                                intent.putExtra("expDate", expense.getDate());
+                                intent.putExtra("expTime", expense.getTime());
+                                intent.putExtra("img",expense.getImage());
 
                                 context.startActivity(intent);
                                 return true;
@@ -124,10 +128,13 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
             public void onClick(View view) {
 
                 Bundle args = new Bundle();
+                Intent intent= new Intent();
                 args.putString("expName", expense.getExpenseName());
                 args.putInt("expAmount", expense.getExpenseAmount());
                 args.putString("expDate", expense.getDate());
                 args.putString("expTime", expense.getTime());
+                intent.putExtra("img",expense.getImage());
+
 
 
 

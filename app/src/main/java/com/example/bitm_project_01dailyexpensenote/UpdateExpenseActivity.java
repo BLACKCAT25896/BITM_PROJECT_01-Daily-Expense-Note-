@@ -7,12 +7,15 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -26,7 +29,7 @@ public class UpdateExpenseActivity extends AppCompatActivity implements DatePick
     private EditText expenseAmount, expenseDate, expenseTime;
     private Spinner spinner;
     private ImageButton date, time;
-    private Button addExp;
+    private Button addExp,addDcBtn;
     private String type, amount, eDate, eTime,document;
     private ExpenseDataOpenHelper helper;
     private DailyExpenseAdapter adapter;
@@ -59,22 +62,93 @@ public class UpdateExpenseActivity extends AppCompatActivity implements DatePick
 
             }
         });
+
+        addDcBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                PopupMenu popupMenu = new PopupMenu(UpdateExpenseActivity.this, view);
+
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+
+                        switch (menuItem.getItemId()) {
+                            case R.id.camera:
+
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                startActivityForResult(intent,0);
+
+
+                                Toast.makeText(UpdateExpenseActivity.this, "Camera", Toast.LENGTH_SHORT).show();
+                                return true;
+                            case R.id.gallery:
+
+                                Intent intent1 = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                startActivityForResult(intent1,1);
+
+
+                                Toast.makeText(UpdateExpenseActivity.this, "Gallery", Toast.LENGTH_SHORT).show();
+                                return true;
+                            default:
+
+
+
+
+                        }
+
+
+
+
+                        return false;
+                    }
+                });
+
+                popupMenu.inflate(R.menu.document);
+                popupMenu.show();
+
+            }
+        });
+
+
+        Intent intent = getIntent();
+
+        String expType = intent.getStringExtra("expName");
+        String expAmount = intent.getStringExtra("expAmount");
+        String expDate = intent.getStringExtra("expDate");
+        String expTime = intent.getStringExtra("expTime");
+        byte[] image = intent.getByteArrayExtra("img");
+
+        spinner.setTag(expType);
+        expenseAmount.setText(expAmount);
+        expenseDate.setText(expDate);
+        expenseTime.setText(expTime);
+
+
+
+
+
+
+
+
+
+
         addExp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 
                 type = spinner.getSelectedItem().toString();
                 amount = expenseAmount.getText().toString();
                 eDate = expenseDate.getText().toString();
                 eTime = expenseTime.getText().toString();
 
-                helper.insertExpenseData(type, Integer.parseInt(String.valueOf(amount)), eDate, eTime,null);
+                //helper.insertExpenseData(type, Integer.parseInt(String.valueOf(amount)), eDate, eTime,null);
 
 
                 Toast.makeText(UpdateExpenseActivity.this, "Data updated to Database", Toast.LENGTH_SHORT).show();
-//                expenseAmount.getText().clear();
-//                expenseDate.getText().clear();
-//                expenseTime.getText().clear();
+
 
 
                 startActivity(new Intent(UpdateExpenseActivity.this, ExpenseFragment.class));
@@ -102,6 +176,7 @@ public class UpdateExpenseActivity extends AppCompatActivity implements DatePick
         helper = new ExpenseDataOpenHelper(this);
         adapter = new DailyExpenseAdapter(helper, expenseList, this);
         spinner = findViewById(R.id.spinnerView);
+        addDcBtn = findViewById(R.id.addDocBtn);
     }
 
     @Override
