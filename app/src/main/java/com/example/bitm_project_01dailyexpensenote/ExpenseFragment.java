@@ -12,9 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -25,7 +29,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ExpenseFragment extends Fragment {
+public class ExpenseFragment extends Fragment implements SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
     private DailyExpenseAdapter adapter;
     private List<Expense> expenseList;
     private RecyclerView recyclerView;
@@ -56,13 +60,24 @@ public class ExpenseFragment extends Fragment {
             }
         });
 
+
+
         showexpense();
 
         return view;
 
     }
 
+
+
+    //*******************************************************************************************
+
+
+    //*******************************************************************************************
+
+
     private void showexpense() {
+
         Cursor cursor = helper.showExpenseData();
         while (cursor.moveToNext()) {
 
@@ -71,12 +86,8 @@ public class ExpenseFragment extends Fragment {
             int expenseAmount = cursor.getInt(cursor.getColumnIndex(helper.COL_AMOUNT));
             String date = cursor.getString(cursor.getColumnIndex(helper.COL_DATE));
             String time = cursor.getString(cursor.getColumnIndex(helper.COL_TIME));
-            byte[] doc = cursor.getBlob(cursor.getColumnIndex(helper.COL_DOCUMENT));
+            String doc = cursor.getString(cursor.getColumnIndex(helper.COL_DOCUMENT));
 
-
-//            Bitmap bmp= BitmapFactory.decodeByteArray(doc,0,doc.length);
-//            ImageView image = new ImageView(getContext());
-//            image.setImageBitmap(bmp);
 
             expenseList.add(new Expense(id, expenseName, Integer.parseInt(String.valueOf(expenseAmount)), date, time, doc));
             adapter.notifyDataSetChanged();
@@ -100,4 +111,41 @@ public class ExpenseFragment extends Fragment {
         floatingActionButton = view.findViewById(R.id.floatingActionBtn);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.search_menu,menu);
+        MenuItem menuItem = menu.findItem(R.id.search_action);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Search");
+
+
+
+
+
+
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem menuItem) {
+        return false;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        return false;
+    }
 }

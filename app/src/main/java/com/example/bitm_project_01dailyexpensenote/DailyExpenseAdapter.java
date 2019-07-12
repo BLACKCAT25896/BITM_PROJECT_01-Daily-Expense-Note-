@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -28,25 +30,26 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static android.graphics.Bitmap.*;
 
-public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapter.ViewHolder> implements PopupMenu.OnMenuItemClickListener {
-    private long allTotal=0;
+public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapter.ViewHolder> implements PopupMenu.OnMenuItemClickListener, Filterable {
+    private long allTotal = 0;
     private List<Expense> expenseList;
+    private List<Expense> expenseListFull;
     private Context context;
     private ExpenseDataOpenHelper helper;
-
-
-
-
 
 
     public DailyExpenseAdapter(ExpenseDataOpenHelper helper, List<Expense> expenseList, Context context) {
         this.helper = helper;
         this.expenseList = expenseList;
+        // expenseListFull = new ArrayList<>(expenseList);
         this.context = context;
+
     }
 
     @NonNull
@@ -84,26 +87,28 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
                             case R.id.updateItem:
 
                                 Intent intent = new Intent(context, UpdateExpenseActivity.class);
+                                Bundle bundle = new Bundle();
 
                                 intent.putExtra("expName", expense.getExpenseName());
                                 intent.putExtra("expAmount", expense.getExpenseAmount());
                                 intent.putExtra("expDate", expense.getDate());
                                 intent.putExtra("expTime", expense.getTime());
-                                intent.putExtra("img",expense.getImage());
+                                intent.putExtra("img", expense.getImage());
 
                                 context.startActivity(intent);
                                 return true;
                             case R.id.deleteItem:
+                                helper = new ExpenseDataOpenHelper(context);
 
 
-                               //helper.deleteExpenseData(expenseList.get(position).getId());
-                                expenseList.remove(holder.getAdapterPosition());
+                                helper.deleteExpenseData(expense.getId());
+                                expenseList.remove(position);
 
-                                notifyItemRemoved(holder.getAdapterPosition());
+                                notifyItemRemoved(position);
                                 notifyDataSetChanged();
 
 
-                                Toast.makeText(context, "Delete item Clicked", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(context, "Delete item Clicked", Toast.LENGTH_SHORT).show();
                                 return true;
                             default:
 
@@ -128,14 +133,12 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
             public void onClick(View view) {
 
                 Bundle args = new Bundle();
-                Intent intent= new Intent();
+                Intent intent = new Intent();
                 args.putString("expName", expense.getExpenseName());
                 args.putInt("expAmount", expense.getExpenseAmount());
                 args.putString("expDate", expense.getDate());
                 args.putString("expTime", expense.getTime());
-                intent.putExtra("img",expense.getImage());
-
-
+                intent.putExtra("img", expense.getImage());
 
 
                 BottomSheetDialogFragment bottomSheet = new DetailsBottomSheet();
@@ -156,11 +159,55 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
         return expenseList.size();
     }
 
+    @Override
+    public Filter getFilter() {
+        return expenseFilter;
+    }
+
+    private Filter expenseFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+
+            List<Expense> filterExpenseList = new ArrayList<>();
+            if (charSequence == null || charSequence.length() == 0) {
+                filterExpenseList.addAll(expenseList);
+
+            } else {
+
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+                for (Expense filter : expenseList) {
+
+                    if (filter.getExpenseName().toLowerCase().contains(filterPattern)) {
+
+                        filterExpenseList.add(filter);
+
+                    }
+                }
+
+
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filterExpenseList;
+            return results;
+
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+
+            expenseList.clear();
+            expenseList.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+
+
+        }
+    };
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView expenseName, expenseAmount;
         private ImageButton imageButtonmenu;
-
 
 
         public ViewHolder(@NonNull View itemView) {

@@ -74,8 +74,10 @@
     <ImageView
         android:id="@+id/imageShow"
         android:layout_width="match_parent"
+        android:layout_margin="5dp"
         android:layout_height="match_parent"
-        android:src="@color/cardview_dark_background"/>
+        android:src="@drawable/ic_launcher_background"
+        android:visibility="invisible"/>
 
 
 

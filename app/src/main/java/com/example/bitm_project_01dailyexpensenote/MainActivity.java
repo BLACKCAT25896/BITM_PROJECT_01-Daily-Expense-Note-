@@ -11,16 +11,21 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -28,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     private TextView fromDate, toDate;
     private ImageButton fromBtn, toBtn;
     private DialogFragment datePicker;
+    private DailyExpenseAdapter adapter;
+    private ExpenseDataOpenHelper helper;
+    private List<Expense>expenseList;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -109,7 +117,10 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         spinner = findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.expensetype, R.layout.support_simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
         spinner.setAdapter(adapter);
+        adapter.getFilter();
+
     }
 
     private void init() {
@@ -118,6 +129,9 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         fromBtn = findViewById(R.id.fromDateBtn);
         toBtn = findViewById(R.id.toDateBtn);
         datePicker = new DatePickerFragment();
+        expenseList = new ArrayList<>();
+        helper = new ExpenseDataOpenHelper(this);
+        adapter = new DailyExpenseAdapter(helper,expenseList,this);
 
 
     }
@@ -136,5 +150,29 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu,menu);
+        MenuItem searchTtem = menu.findItem(R.id.search_action);
+        SearchView searchView = (SearchView) searchTtem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String s) {
+
+
+                adapter.getFilter().filter(s);
+
+
+
+                return false;
+            }
+        });
+        return true;
+    }
 }

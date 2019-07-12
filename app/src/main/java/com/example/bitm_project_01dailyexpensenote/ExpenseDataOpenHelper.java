@@ -19,8 +19,8 @@ public class ExpenseDataOpenHelper extends SQLiteOpenHelper {
     public static String COL_DATE = "Date";
     public static String COL_TIME = "Time";
     public static String COL_DOCUMENT = "Document";
-    public String CREATE_TABLE = "create table "+TABLE_NAME+" ("+COL_ID+" integer primary key, "+COL_Type+" text not null, "+COL_AMOUNT+" int not null, "+COL_DATE+" text not null, "+COL_TIME+" text , "+COL_DOCUMENT+" BLOB)";
-    public static int VERSION = 3;
+    public String CREATE_TABLE = "create table "+TABLE_NAME+" ("+COL_ID+" integer primary key, "+COL_Type+" text not null, "+COL_AMOUNT+" int not null, "+COL_DATE+" text not null, "+COL_TIME+" text , "+COL_DOCUMENT+" text)";
+    public static int VERSION = 4;
 
 
     public ExpenseDataOpenHelper(Context context) {
@@ -35,14 +35,14 @@ public class ExpenseDataOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-         sqLiteDatabase = getWritableDatabase();
+         sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         this.onCreate(sqLiteDatabase);
 
     }
 
 
-    public long insertExpenseData(String type, int amount, String date, String time, byte[] document) {
+    public long insertExpenseData(String type, int amount, String date, String time, String document) {
 
         ContentValues contV = new ContentValues();
         contV.put(COL_Type, type);
@@ -69,6 +69,20 @@ public class ExpenseDataOpenHelper extends SQLiteOpenHelper {
        getWritableDatabase().delete(TABLE_NAME,"ID=?", new String[]{String.valueOf(data)});
 
     }
+    public boolean updateExpenseData(String type, int amount, String date, String time){
+        ContentValues contV = new ContentValues();
+        contV.put(COL_Type, type);
+        contV.put(COL_AMOUNT, amount);
+        contV.put(COL_DATE, date);
+        contV.put(COL_TIME, time);
+//        contV.put(COL_DOCUMENT,document);
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        sqLiteDatabase.update(TABLE_NAME,contV,"ID=?", new String[]{time});
+        return true;
+    }
+
+
+
 
 
 

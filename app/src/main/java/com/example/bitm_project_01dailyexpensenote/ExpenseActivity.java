@@ -51,8 +51,7 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
     private DailyExpenseAdapter adapter;
     private List<Expense> expenseList;
     private ImageView openDoc;
-    private Bitmap bp;
-    private byte[] photo,p;
+
 
 
     @Override
@@ -157,20 +156,11 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
                 amount = expenseAmount.getText().toString();
                 eDate = expenseDate.getText().toString();
                 eTime = expenseTime.getText().toString();
+                document= expenseAmount.getText().toString();
 
 
 
-
-
-
-
-
-
-
-
-
-
-                helper.insertExpenseData(type, Integer.parseInt(String.valueOf(amount)), eDate, eTime,imageViewToByte(openDoc));
+                helper.insertExpenseData(type, Integer.parseInt(String.valueOf(amount)), eDate, eTime,document);
 
 
                 Toast.makeText(ExpenseActivity.this, "Data added to Database", Toast.LENGTH_SHORT).show();
@@ -178,11 +168,6 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
                 expenseDate.getText().clear();
                 expenseTime.getText().clear();
 
-
-
-
-
-                //startActivity(new Intent(ExpenseActivity.this, ExpenseFragment.class));
 
 
             }
@@ -193,6 +178,13 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
 
 
     //////////////////***********************************************///////////////////////
+    public String BitMapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b=baos.toByteArray();
+        String temp=Base64.encodeToString(b, Base64.DEFAULT);
+        return temp;
+    }
     public static byte[] imageViewToByte(ImageView image) {
         Bitmap bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -229,12 +221,14 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
             if(requestCode ==0){
                 Bundle bundle = data.getExtras();
                 Bitmap bitmap = (Bitmap) bundle.get("data");
-               openDoc.setImageBitmap(bitmap);
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                byte[] byteArray = byteArrayOutputStream .toByteArray();
 
-                String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                String doc = BitMapToString(bitmap);
+
+//                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+//                byte[] byteArray = byteArrayOutputStream .toByteArray();
+
+
 
 
 
@@ -250,7 +244,8 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                     byte[] byteArray = byteArrayOutputStream .toByteArray();
 
-                    String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    String doc = BitMapToString(bitmap);
+
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -260,25 +255,6 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-
-
-
-//    public static String encodeToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality)
-//    {
-//        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-//        image.compress(compressFormat, quality, byteArrayOS);
-//        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
-//    }
-//
-//    public static Bitmap decodeBase64(String input)
-//    {
-//        byte[] decodedBytes = Base64.decode(input, 0);
-//        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-//    }
-
-
-
 
     private void initSpinner() {
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.expensetype, R.layout.support_simple_spinner_dropdown_item);
@@ -322,5 +298,7 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
 
 
     }
+
+
 
 }

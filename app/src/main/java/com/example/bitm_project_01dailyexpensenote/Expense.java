@@ -8,9 +8,9 @@ public class Expense {
     private int expenseAmount;
     private String date;
     private String time;
-    private byte[] image;
+    private String image;
 
-    public Expense(int id, String expenseName, int expenseAmount, String date, String time, byte[] image) {
+    public Expense(int id, String expenseName, int expenseAmount, String date, String time, String image) {
         this.id = id;
         this.expenseName = expenseName;
         this.expenseAmount = expenseAmount;
@@ -39,7 +39,7 @@ public class Expense {
         return time;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 }

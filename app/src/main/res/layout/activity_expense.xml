@@ -27,6 +27,7 @@
         android:textSize="16dp"
         android:id="@+id/expenseAET"
         android:layout_margin="5dp"
+        android:inputType="number"
         />
     <LinearLayout
         android:layout_width="match_parent"
