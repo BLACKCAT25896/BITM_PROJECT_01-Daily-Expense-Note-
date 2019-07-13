@@ -138,7 +138,7 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
                 args.putInt("expAmount", expense.getExpenseAmount());
                 args.putString("expDate", expense.getDate());
                 args.putString("expTime", expense.getTime());
-                intent.putExtra("img", expense.getImage());
+                args.putString("img", expense.getImage());
 
 
                 BottomSheetDialogFragment bottomSheet = new DetailsBottomSheet();

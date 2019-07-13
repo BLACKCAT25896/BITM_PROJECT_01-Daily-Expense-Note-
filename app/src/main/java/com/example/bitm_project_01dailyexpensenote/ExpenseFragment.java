@@ -17,8 +17,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -37,6 +40,7 @@ public class ExpenseFragment extends Fragment implements SearchView.OnQueryTextL
     private FloatingActionButton floatingActionButton;
 
 
+
     public ExpenseFragment() {
         // Required empty public constructor
     }
@@ -53,6 +57,8 @@ public class ExpenseFragment extends Fragment implements SearchView.OnQueryTextL
         initRecyclerView(view);
 
 
+
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,6 +69,8 @@ public class ExpenseFragment extends Fragment implements SearchView.OnQueryTextL
 
 
         showexpense();
+
+
 
         return view;
 
@@ -139,6 +147,10 @@ public class ExpenseFragment extends Fragment implements SearchView.OnQueryTextL
         return false;
     }
 
+    public interface OnItem1SelectedListener {
+        void OnItem1SelectedListener(Expense item);
+    }
+
     @Override
     public boolean onQueryTextSubmit(String s) {
         return false;
@@ -146,6 +158,30 @@ public class ExpenseFragment extends Fragment implements SearchView.OnQueryTextL
 
     @Override
     public boolean onQueryTextChange(String s) {
+
+
+
+        if (s == null || s.trim().isEmpty()) {
+            resetSearch();
+            return false;
+        }
+
+        List<Expense> filteredValues = new ArrayList<Expense>(expenseList);
+        for (Expense value : expenseList) {
+
+            if (!value.toString().toLowerCase().contains(s.toLowerCase())) {
+                filteredValues.remove(value);
+            }
+        }
+
+        adapter = new DailyExpenseAdapter(helper,expenseList,getContext());
+        recyclerView.setAdapter(adapter);
         return false;
+
     }
+    public void resetSearch() {
+        adapter = new DailyExpenseAdapter(helper,expenseList,getContext());
+        recyclerView.setAdapter(adapter);
+    }
+
 }

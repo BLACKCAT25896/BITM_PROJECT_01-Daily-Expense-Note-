@@ -46,12 +46,13 @@ public class DetailsBottomSheet extends BottomSheetDialogFragment {
 
         return view;
     }
-    public Bitmap StringToBitMap(String encodedString){
+
+    public Bitmap StringToBitMap(String encodedString) {
         try {
-            byte [] encodeByte= Base64.decode(encodedString,Base64.DEFAULT);
-            Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
             return bitmap;
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.getMessage();
             return null;
         }
@@ -72,11 +73,6 @@ public class DetailsBottomSheet extends BottomSheetDialogFragment {
         date.setText(expenseD);
         time.setText(expenseTime);
         showImg.setImageBitmap(docc);
-
-
-
-//        Bitmap bmp = BitmapFactory.decodeByteArray(img, 0, img.length);
-//        showImg.setImageBitmap(Bitmap.createScaledBitmap(bmp, showImg.getWidth(), showImg.getHeight(), false));
 
         showDoc.setOnClickListener(new View.OnClickListener() {
             @Override

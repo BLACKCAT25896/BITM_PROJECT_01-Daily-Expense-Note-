@@ -46,7 +46,7 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
     private Spinner spinner;
     private ImageButton date, time;
     private Button addExp, addDocBtn;
-    private String type, amount, eDate, eTime,document;
+    private String type, amount, eDate, eTime,document,image;
     private ExpenseDataOpenHelper helper;
     private DailyExpenseAdapter adapter;
     private List<Expense> expenseList;
@@ -156,7 +156,10 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
                 amount = expenseAmount.getText().toString();
                 eDate = expenseDate.getText().toString();
                 eTime = expenseTime.getText().toString();
-                document= expenseAmount.getText().toString();
+                document = image;
+
+
+
 
 
 
@@ -170,6 +173,7 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
 
 
 
+
             }
         });
 
@@ -177,7 +181,7 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
     }
 
 
-    //////////////////***********************************************///////////////////////
+
     public String BitMapToString(Bitmap bitmap){
         ByteArrayOutputStream baos=new  ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
@@ -185,13 +189,8 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
         String temp=Base64.encodeToString(b, Base64.DEFAULT);
         return temp;
     }
-    public static byte[] imageViewToByte(ImageView image) {
-        Bitmap bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        return byteArray;
-    }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -221,8 +220,10 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
             if(requestCode ==0){
                 Bundle bundle = data.getExtras();
                 Bitmap bitmap = (Bitmap) bundle.get("data");
+                openDoc.setImageBitmap(bitmap);
+                 image = BitMapToString(bitmap);
 
-                String doc = BitMapToString(bitmap);
+
 
 //                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 //                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
@@ -240,11 +241,7 @@ public class ExpenseActivity extends AppCompatActivity implements DatePickerDial
                     InputStream inputStream = getContentResolver().openInputStream(uri);
                     Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                     openDoc.setImageBitmap(bitmap);
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                    byte[] byteArray = byteArrayOutputStream .toByteArray();
-
-                    String doc = BitMapToString(bitmap);
+                    image = BitMapToString(bitmap);
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

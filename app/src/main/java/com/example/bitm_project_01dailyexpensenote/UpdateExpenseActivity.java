@@ -139,7 +139,7 @@ public class UpdateExpenseActivity extends AppCompatActivity implements DatePick
                 eDate = expenseDate.getText().toString();
                 eTime = expenseTime.getText().toString();
 
-                helper.updateExpenseData(type, Integer.parseInt(String.valueOf(amount)), eDate, eTime);
+              //  helper.updateExpenseData(type, Integer.parseInt(String.valueOf(amount)), eDate, eTime);
 
                 Toast.makeText(UpdateExpenseActivity.this, "Data updated to Database", Toast.LENGTH_SHORT).show();
 
