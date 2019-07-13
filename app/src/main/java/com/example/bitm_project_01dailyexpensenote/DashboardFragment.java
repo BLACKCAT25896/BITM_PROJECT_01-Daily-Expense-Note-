@@ -1,6 +1,7 @@
 package com.example.bitm_project_01dailyexpensenote;
 
 
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -22,6 +23,9 @@ public class DashboardFragment extends Fragment {
     private DailyExpenseAdapter adapter;
     private ExpenseDataOpenHelper helper;
     private List<Expense> expenseList;
+    private String sum,temp;
+    private int allTotal=0;
+
 
 
 
@@ -32,29 +36,38 @@ public class DashboardFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_dashboard, container, false);
 
 
 
         init(view);
 
-        totalAmountExp(view);
+        showexpense();
 
 
         return view;
 
     }
+    private void showexpense() {
 
-    private void totalAmountExp(View view) {
+        Cursor cursor = helper.showExpenseData();
+        while (cursor.moveToNext()) {
 
-    }
 
-    private void settotalAmount(View view) {
-        totalAmount.setText(String.valueOf(totalAmount));
+            int expenseAmount = cursor.getInt(cursor.getColumnIndex(helper.COL_AMOUNT));
+
+            allTotal = allTotal+expenseAmount;
+
+
+            sum = String.valueOf(allTotal);
+
+
+            totalAmount.setText(sum);
+
+
+        }
     }
 
     private void init(View view) {

@@ -70,8 +70,7 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
         holder.expenseName.setText(expense.getExpenseName());
         holder.expenseAmount.setText(Double.toString(expense.getExpenseAmount()));
 
-        long totalAmount = Integer.valueOf(expense.getExpenseAmount());
-        allTotal = allTotal + totalAmount;
+
 
         holder.imageButtonmenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +107,7 @@ public class DailyExpenseAdapter extends RecyclerView.Adapter<DailyExpenseAdapte
                                 notifyDataSetChanged();
 
 
-                                //Toast.makeText(context, "Delete item Clicked", Toast.LENGTH_SHORT).show();
+
                                 return true;
                             default:
 

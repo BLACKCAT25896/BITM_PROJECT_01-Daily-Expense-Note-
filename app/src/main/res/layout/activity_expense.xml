@@ -93,7 +93,7 @@
            android:id="@+id/addDocBtn"
            android:background="@drawable/custom_button"
            android:textColor="#fff"
-           android:layout_width="150dp"
+           android:layout_width="170dp"
            android:layout_marginLeft="100dp"
            android:layout_height="wrap_content"
            android:text="Add Document (if any)"
